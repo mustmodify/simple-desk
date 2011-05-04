@@ -1,3 +1,6 @@
+.bundle
+Gemfile.lock
 config/odesk.yml
 db/*sqlite3
+vendor/bundle
 log/*log
