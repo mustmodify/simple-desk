@@ -2,5 +2,6 @@
 Gemfile.lock
 config/odesk.yml
 db/*sqlite3
+tmp/
 vendor/bundle
 log/*log
