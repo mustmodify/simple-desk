@@ -1,3 +1,5 @@
+.rbx
+.rvmrc
 .bundle
 Gemfile.lock
 config/odesk.yml

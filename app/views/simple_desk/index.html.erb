@@ -1,20 +1,25 @@
-<h2>Working hours for this week</h2>
-<div class="time_report">
-  <table>
-    <% if @time_report.empty? -%>
-      No time logged for this week.<br/>
-      Want to search for cool new jobs?
-      <% form_tag({:action=>'search_jobs'}, :method=>:get) do -%>
-        <%= text_field_tag :query %>
-        <%= submit_tag "search" %>
-      <% end -%>
-    <% else -%>
-      <% @time_report.each do |entry| -%>
-        <tr>
-          <td><%= entry['team_name'] %></td>
-          <td><%= format_hours(entry['hours']) %></td>
-        </tr>
-      <% end -%>
-    <% end -%>
-  </table>
-</div>
+<h1>Johnathon Wright</h1>
+
+<table>
+  <%- @jw.each do |time_report| %>
+    <tr>
+      <td><%= time_report['provider_id'] %></td>
+      <td><%= time_report['team_name'] %></td>
+      <td><%= format_hours( time_report['hours'] ) %></td>
+      <td><%= time_report['worked_on'] %></td>
+    </tr>
+  <% end %>
+</table>
+
+<h1>MustModify</h1>
+<table>
+  <%- @mustmodify.each do |time_report| %>
+    <tr>
+      <td><%= time_report['provider_id'] %></td>
+      <td><%= time_report['team_name'] %></td>
+      <td><%= format_hours( time_report['hours'] ) %></td>
+      <td><%= time_report['worked_on'] %></td>
+    </tr>
+  <% end %>
+</table>
+

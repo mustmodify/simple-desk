@@ -2,13 +2,33 @@ class SimpleDeskController < ApplicationController
   before_filter :odesk_required
   
   def index
-    @time_report = RubyDesk::TimeReport.find(@odesk_connector,
-        :select=>"team_name, sum(hours)",
-        :conditions=>{:worked_on=>Date.today.monday, :provider_id=>@odesk_connector.auth_user.uid})
-    if @time_report && @time_report.size > 1
-      total_hours = @time_report.sum{|entry| entry['hours']}
-      @time_report.insert(0, {'team_name'=>"total", 'hours'=>total_hours})
-    end
+    start_of_week = Date.today.monday
+
+    @jw = 7.times.map do |i|
+      date = start_of_week + i.days
+
+      RubyDesk::TimeReport.find(@odesk_connector,
+        :select=>"team_name, sum(hours), worked_on",
+        :conditions=>{:worked_on=>date, :provider_id => 'mustmodify'})
+    end.flatten
+    @jw.each{|entry| entry['provider_id'] = 'mustmodify'}
+
+     
+
+    @mustmodify = 7.times.map do |i|
+      date = start_of_week + i.days
+
+      RubyDesk::TimeReport.find(@odesk_connector,
+        :select=>"provider_id, team_name, sum(hours), worked_on",
+        :conditions=>{:worked_on=>date, :agency_id => 'mustmodify'})
+    end.flatten
+
+    Assignment.reset
+    Assignment.process(@jw + @mustmodify).uniq
+
+    flash[:notice] = "Reloaded data at #{Time.now}"
+
+    redirect_to assignments_path
   end
   
   def search_jobs

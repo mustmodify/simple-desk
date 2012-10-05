@@ -1,0 +1,18 @@
+<p>
+  <b>Description:</b>
+  <%=h @assignment.description %>
+</p>
+
+<p>
+  <b>Person:</b>
+  <%=h @assignment.person_id %>
+</p>
+
+<p>
+  <b>Odesk client:</b>
+  <%=h @assignment.odesk_client_id %>
+</p>
+
+
+<%= link_to 'Edit', edit_assignment_path(@assignment) %> |
+<%= link_to 'Back', assignments_path %>

@@ -1,0 +1,51 @@
+<a href="/">Refresh Data</a>
+<br />
+<div class="quick" style="vertical-align: middle">
+<img src="https://chart.googleapis.com/chart?chs=200x60&cht=bhs&chd=t:<%= chart_values.join('|') %>&chxt=x&chds=0,<%= chart_max %>&chco=<%= chart_colors.join(',') %>"> <div style="padding: 5px 0; font-size: 28px; display: inline;"><%= remaining %> % left</div>
+</div>
+<div style="font-size:15px"> 
+<%= Assignment.total_for('mustmodify').decimal_precision(2) %> of <%= goal %>
+</div>
+
+
+<h1>Listing assignments</h1>
+
+<table>
+  <tr>
+    <th>Description</th>
+    <th>Hours Worked</th>
+    <th>Max Hours</th>
+    <th>Rate</th>
+    <th>Total $</th>
+    <th></th>
+  </tr>
+
+<% @assignments.each do |provider, assignments| %>
+  <tr><td colspan="6"><%= provider %></td></tr>
+
+  <% assignments.each do |assignment| %>
+    <tr>
+      <td><%=h assignment.description %></td>
+      <td><%=h format_hours(assignment.hours_worked) %></td>
+      <td><%=h assignment.max_hours %></td>
+      <td><%=h assignment.rate %></td>
+      <td><%=h number_to_currency(assignment.total.decimal_precision(2)) %></td>
+      <td><%= link_to 'Edit', edit_assignment_path(assignment) %></td>
+    </tr>
+  <% end %>
+
+  <tr>
+    <td></td>
+    <td><font size="5px"><%= format_hours(Assignment.sum('hours_worked', :conditions => "provider_odesk_id = '#{provider}'")) %></font></td>
+    <td colspan="2"></td>
+    <td><font size="5px"><%= number_to_currency( Assignment.total_for(provider).decimal_precision(2)) %></font></td>
+    <td>
+  </tr>
+
+<% end %>
+</table>
+
+
+<br />
+
+<%= link_to 'New assignment', new_assignment_path %>
